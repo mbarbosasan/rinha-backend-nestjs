@@ -3,6 +3,7 @@ import { Cliente } from './domain/Cliente';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Transacao } from './domain/Transacao';
+import { response } from 'express';
 
 @Injectable()
 export class ClienteService {
@@ -22,7 +23,10 @@ export class ClienteService {
     });
 
     if (!cliente)
-      throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'É da polícia? Eu queria denunciar um cliente que sumiu',
+        HttpStatus.NOT_FOUND,
+      );
 
     const clienteSaldoAtualizado = {
       limite: cliente.limite,
@@ -50,30 +54,52 @@ export class ClienteService {
     });
   }
 
-  getSaldoCliente(id: number) {
-    const transacoesCliente = this.transacaoRepository.find({
-      where: {
+  buscarExtrato(id: number) {
+    const extrato = this.dataSource
+      .getRepository(Transacao)
+      .createQueryBuilder()
+      .select()
+      .where({
         id_cliente: id,
-      },
-    });
-    const clienteInfo = this.clienteRepository.findOneBy({ id });
+      })
+      .orderBy('realizada_em', 'DESC')
+      .take(10)
+      .getMany();
 
-    return Promise.allSettled([transacoesCliente, clienteInfo]).then(
-      ([transacoesClienteResult, clienteInfoResult]) => {
+    const cliente = this.clienteRepository.findOne({
+      where: { id },
+    });
+
+    return Promise.allSettled([extrato, cliente]).then(
+      ([extratoResult, clienteResult]) => {
         if (
-          transacoesClienteResult.status === 'rejected' ||
-          clienteInfoResult.status === 'rejected'
+          extratoResult.status === 'rejected' ||
+          clienteResult.status === 'rejected'
         )
-          return new HttpException(
-            'Houve um erro interno, por favor, tente novamente ou volte mais tarde.',
-            HttpStatus.I_AM_A_TEAPOT,
+          throw new HttpException(
+            'Houve um erro interno ao carregar as informações, tente novamente ou volte mais tarde',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+
+        if (!clienteResult.value)
+          throw new HttpException(
+            'Não foi possível encontrar esse usuário, talvez ele não exista? Afinal o que é existir? Para platão...',
+            HttpStatus.NOT_FOUND,
           );
         return {
-          limite: clienteInfoResult.value.limite,
-          saldo: transacoesClienteResult.value.reduce((acc, transacao) => {
-            if (transacao.tipo === 'c') return acc + transacao.valor;
-            else return acc - transacao.valor;
-          }, clienteInfoResult.value.saldoInicial),
+          saldo: {
+            total: clienteResult.value.saldoInicial,
+            limite: clienteResult.value.limite,
+            data_extrato: new Date().toISOString(),
+          },
+          ultimas_transacoes: [
+            extratoResult.value.map((transacao) => ({
+              valor: transacao.valor,
+              tipo: transacao.tipo,
+              descricao: transacao.descricao,
+              realizada_em: transacao.realizada_em,
+            })),
+          ],
         };
       },
     );

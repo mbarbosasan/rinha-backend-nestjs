@@ -19,6 +19,11 @@ export class ClienteController {
       id_cliente: param.id,
     });
   }
+
+  @Get(':id/extrato')
+  buscarExtrato(@Param() param: { [key: string]: any }) {
+    return this.clienteService.buscarExtrato(param.id);
+  }
   @Post()
   criarCliente(@Body() cliente: Cliente) {
     return this.clienteService.criarCliente(cliente);
