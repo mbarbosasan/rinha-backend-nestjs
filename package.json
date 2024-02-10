@@ -1,10 +1,10 @@
 {
-  "name": "untitled3",
+  "name": "rinha-backend-nestjs",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Projeto criado para ser utilizado na rinha de backend, feito apenas por fins educativos e de entretenimento.",
+  "author": "Moises Santos",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
