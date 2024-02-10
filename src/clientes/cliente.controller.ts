@@ -13,10 +13,10 @@ export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
 
   @Post(':id/transacoes')
-  novaTransacao(@Param() id: number, @Body() transacao: Transacao) {
+  novaTransacao(@Param() param: any, @Body() transacao: Transacao) {
     const obj = {
       ...transacao,
-      id_cliente: id,
+      id_cliente: param.id,
       id_transacao: null,
     };
     return this.clienteService.criarTransacao(obj);
