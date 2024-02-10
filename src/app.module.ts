@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ClientesModule } from './clientes/clientes.module';
+import { ClienteModule } from './clientes/cliente.module';
 import { Cliente } from './clientes/domain/Cliente';
-import { TransacoesModule } from './transacoes/transacoes.module';
+import { Transacao } from './clientes/domain/Transacao';
 
 @Module({
   imports: [
@@ -15,11 +15,10 @@ import { TransacoesModule } from './transacoes/transacoes.module';
       username: 'root',
       password: 'root',
       database: 'rinha-backend',
-      entities: [Cliente],
+      entities: [Cliente, Transacao],
       synchronize: true,
     }),
-    ClientesModule,
-    TransacoesModule,
+    ClienteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
