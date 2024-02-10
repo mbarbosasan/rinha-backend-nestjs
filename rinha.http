@@ -1,0 +1,16 @@
+
+GET http://localhost:3000/cliente/1
+###
+
+GET http://localhost:3000/cliente
+
+###
+POST http://localhost:3000/cliente
+Content-Type: application/json
+
+{
+  "limite": "10000",
+  "saldoInicial": "1000"
+}
+
+###
