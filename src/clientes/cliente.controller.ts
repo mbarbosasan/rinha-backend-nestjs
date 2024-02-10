@@ -14,12 +14,14 @@ export class ClienteController {
 
   @Post(':id/transacoes')
   novaTransacao(@Param() param: any, @Body() transacao: Transacao) {
-    const obj = {
-      ...transacao,
-      id_cliente: param.id,
-      id_transacao: null,
-    };
-    return this.clienteService.criarTransacao(obj);
+    try {
+      return this.clienteService.criarTransacao({
+        ...transacao,
+        id_cliente: param.id,
+      });
+    } catch (error) {
+      return error;
+    }
   }
   @Post()
   criarCliente(@Body() cliente: Cliente) {

@@ -36,7 +36,7 @@ export class ClienteService {
       clienteSaldoAtualizado.saldoInicial < 0 &&
       clienteSaldoAtualizado.saldoInicial < cliente.limite
     )
-      return new HttpException(
+      throw new HttpException(
         'Não há limite suficiente para essa operação',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );

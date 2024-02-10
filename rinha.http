@@ -20,7 +20,7 @@ POST http://localhost:3000/cliente/3/transacoes
 Content-Type: application/json
 
 {
-  "valor": 11000000,
+  "valor": 1000000,
   "tipo": "d",
   "descricao": "zezin do queijo"
 }
