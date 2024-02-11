@@ -19,11 +19,27 @@ O projeto foi criado para atingir os objetivos propostos pela [rinha de backend]
 
 - [x] Inserir nova transação
 - [x] Buscar extrato do Usuário
-- [ ] Containerização
-
+- [x] Containerização
+- [x] Docker-compose
+- [x] Env files 
 ### Inicializando aplicação
+
+Crie um arquivo .env na raiz do projeto e insira as respectivas configurações:
+
+```
+HOST
+
+MYSQL_USER
+MYSQL_PASSWORD
+MYSQL_ROOT_PASSWORD
+MYSQL_DATABASE
+```
 
 ```
 npm i
 npm run start
+```
+ou caso queira utilizar o Docker-compose
+```
+docker compose up
 ```
