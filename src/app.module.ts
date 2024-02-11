@@ -5,16 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClienteModule } from './clientes/cliente.module';
 import { Cliente } from './clientes/domain/Cliente';
 import { Transacao } from './clientes/domain/Transacao';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: `${process.env.host}`,
       port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'rinha-backend',
+      username: `${process.env.MYSQL_USER}`,
+      password: `${process.env.MYSQL_PASSWORD}`,
+      database: `${process.env.MYSQL_DATABASE}`,
       entities: [Cliente, Transacao],
       synchronize: true,
     }),
