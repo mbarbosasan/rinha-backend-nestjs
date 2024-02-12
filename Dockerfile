@@ -4,12 +4,12 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm i
 
 COPY . .
 
 RUN npm run build
 
-EXPOSE 3000:3000
+EXPOSE ${APP_PORT}
 
 CMD ["npm", "run", "start:prod"]
