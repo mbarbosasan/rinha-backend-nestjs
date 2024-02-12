@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { Cliente } from './domain/Cliente';
 import { ClienteService } from './cliente.service';
 
@@ -8,11 +8,12 @@ export interface Transacao {
   descricao: string;
 }
 
-@Controller('cliente')
+@Controller('clientes')
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
 
   @Post(':id/transacoes')
+  @HttpCode(200)
   novaTransacao(@Param() param: any, @Body() transacao: Transacao) {
     return this.clienteService.criarTransacao({
       ...transacao,
@@ -21,6 +22,7 @@ export class ClienteController {
   }
 
   @Get(':id/extrato')
+  @HttpCode(200)
   buscarExtrato(@Param() param: { [key: string]: any }) {
     return this.clienteService.buscarExtrato(param.id);
   }
