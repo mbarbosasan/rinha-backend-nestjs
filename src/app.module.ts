@@ -26,4 +26,34 @@ import { DataSource } from 'typeorm';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(@InjectDataSource() private dataSource: DataSource) {
+    console.log('Salvando clientes.');
+    const initData = [
+      {
+        limite: 100000,
+        saldoInicial: 0,
+      },
+      {
+        limite: 80000,
+        saldoInicial: 0,
+      },
+      {
+        limite: 1000000,
+        saldoInicial: 0,
+      },
+      {
+        limite: 10000000,
+        saldoInicial: 0,
+      },
+      {
+        limite: 500000,
+        saldoInicial: 0,
+      },
+    ];
+
+    initData.forEach((cliente: Cliente) => {
+      this.dataSource.getRepository(Cliente).save(cliente);
+    });
+  }
+}
